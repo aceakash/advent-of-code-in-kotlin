@@ -40,6 +40,4 @@ class Day1KtTest {
 
         assertEquals(3, partOne(input))
     }
-
-
 }
