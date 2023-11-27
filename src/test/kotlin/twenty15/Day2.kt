@@ -11,6 +11,14 @@ class Day2 {
         }
     }
 
+    fun partTwo(rawInput: String): Int {
+        return parseInput(rawInput).sumOf { present ->
+            val dims = present.sorted()
+            val bow = dims[0] * dims[1] * dims[2]
+            2 * (dims[0] + dims[1]) + bow
+        }
+    }
+
 
     private fun parseInput(rawInput: String): List<List<Int>> {
         return rawInput.split('\n')

@@ -10,6 +10,12 @@ class Day2KtTest {
         assertEquals(1598415, squareFeetOfPaper)
     }
 
+    @Test
+    fun `part 2 - real input`() {
+        val ribbonLength = Day2().partTwo(realInput())
+        assertEquals(3812909, ribbonLength)
+    }
+
 
 }
 
