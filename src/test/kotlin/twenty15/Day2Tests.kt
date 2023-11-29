@@ -2,7 +2,7 @@ package twenty15
 
 import kotlin.test.*
 
-class Day2KtTest {
+class Day2Tests {
 
     @Test
     fun `part 1 - real input`() {
@@ -16,11 +16,8 @@ class Day2KtTest {
         assertEquals(3812909, ribbonLength)
     }
 
-
-}
-
-fun realInput(): String {
-    return """
+    private fun realInput(): String {
+        return """
         4x23x21
         22x29x19
         11x4x11
@@ -1022,4 +1019,7 @@ fun realInput(): String {
         20x29x30
         23x11x5
     """.trimIndent()
+    }
+
 }
+
