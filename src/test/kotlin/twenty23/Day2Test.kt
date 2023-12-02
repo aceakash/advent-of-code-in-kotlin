@@ -65,7 +65,7 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 
     @Test
     fun `part2 - real input`() {
-        assertEquals(286, Day2().part2(realInput()))
+        assertEquals(63700, Day2().part2(realInput()))
     }
 
 
