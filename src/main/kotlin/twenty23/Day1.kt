@@ -36,6 +36,3 @@ class Day1 {
 
 }
 
-fun Any?.println(): Unit {
-    println(this)
-}
