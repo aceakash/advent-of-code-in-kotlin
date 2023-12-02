@@ -6,7 +6,13 @@ class Day2Tests {
 
     @Test
     fun `part 1 - real input`() {
-        val squareFeetOfPaper = Day2().partOne(realInput())
+        val squareFeetOfPaper = Day2().partOneSeq(realInput())
+        assertEquals(1598415, squareFeetOfPaper)
+    }
+
+    @Test
+    fun `part 1 - test input`() {
+        val squareFeetOfPaper = Day2().partOneSeq("2x3x4\n5x6x7")
         assertEquals(1598415, squareFeetOfPaper)
     }
 
@@ -1023,3 +1029,5 @@ class Day2Tests {
 
 }
 
+/*A present with dimensions 2x3x4 requires 2*6 + 2*12 + 2*8 = 52 square feet of wrapping paper plus 6 square feet of slack, for a total of 58 square feet.
+ */

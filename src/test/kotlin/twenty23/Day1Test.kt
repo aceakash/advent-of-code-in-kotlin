@@ -20,8 +20,39 @@ class Day1Test {
     @Test
     fun `part1 - real input`() {
 
-        assertEquals(142, Day1().part1(realInput()))
+        assertEquals(54632, Day1().part1(realInput()))
     }
+
+    @Test
+    fun `part2 - sample input`() {
+        val input = """
+            two1nine
+            eightwothree
+            abcone2threexyz
+            xtwone3four
+            4nineeightseven2
+            zoneight234
+            7pqrstsixteen
+        """.trimIndent()
+
+        assertEquals(281, Day1().part2(input))
+    }
+
+    @Test
+    fun `part2 - sample input2`() {
+        val input = """
+            two1nine
+        """.trimIndent()
+
+        assertEquals(281, Day1().part2(input))
+    }
+
+    @Test
+    fun `part3 - real input`() {
+
+        assertEquals(111, Day1().part2(realInput()))
+    }
+
 
     private fun realInput(): String {
         return """
