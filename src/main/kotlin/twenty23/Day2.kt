@@ -4,8 +4,6 @@ class Day2 {
     enum class Colour(val maxValue: Int) { red(12), green(13), blue(14) }
 
     fun part1(input: String): Int {
-//        val maxCountsByColour = mapOf("red" to 12, "green" to 13, "blue" to 14)
-
         return Game.parseMultipleGames(input)
             .filter { it.isPossible() }
             .sumOf { it.gameNum }
@@ -39,21 +37,21 @@ class Day2 {
 
         fun getMaxRGB(): Triple<Int, Int, Int> {
             return Triple(
-                sets.maxBy { set -> set.redCount }.redCount,
-                sets.maxBy { set -> set.greenCount }.greenCount,
-                sets.maxBy { set -> set.blueCount }.blueCount
+                sets.maxBy { set -> set.reds }.reds,
+                sets.maxBy { set -> set.greens }.greens,
+                sets.maxBy { set -> set.blues }.blues
             )
         }
 
         private data class GameSet(
-            val redCount: Int = 0,
-            val greenCount: Int = 0,
-            val blueCount: Int = 0,
+            val reds: Int = 0,
+            val greens: Int = 0,
+            val blues: Int = 0,
         ) {
             fun isPossible(): Boolean {
-                return (this.redCount <= Colour.red.maxValue
-                        && this.greenCount <= Colour.green.maxValue
-                        && this.blueCount <= Colour.blue.maxValue)
+                return (this.reds <= Colour.red.maxValue
+                        && this.greens <= Colour.green.maxValue
+                        && this.blues <= Colour.blue.maxValue)
             }
 
             companion object {
