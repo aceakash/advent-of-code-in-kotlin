@@ -21,18 +21,18 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
     @Test
     fun `part1 - single game input`() {
         val input = """
-Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
+Game 1: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 """.trimIndent()
 
-        assertEquals(8, Day2().part1(input))
+        assertEquals(1, Day2().part1(input))
     }
     @Test
     fun `part1 - simplest game`() {
         val input = """
-Game 5: 6 red, 1 blue, 3 green
+Game 1: 6 red, 1 blue, 3 green
 """.trimIndent()
 
-        assertEquals(8, Day2().part1(input))
+        assertEquals(1, Day2().part1(input))
     }
 
     @Test
