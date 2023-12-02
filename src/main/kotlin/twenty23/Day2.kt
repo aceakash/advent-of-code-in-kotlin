@@ -1,6 +1,26 @@
 package twenty23
 
 class Day2 {
+    fun part1(input: String): Int {
+        val games = input.split("\n")
+            .mapIndexed { i, l -> Game.fromString(i, l) }
+
+        val maxCountsByColour = mapOf("red" to 12, "green" to 13, "blue" to 14)
+
+        return games.filter { it.isPossible(maxCountsByColour) }
+            .sumOf { it.gameNum }
+    }
+
+    fun part2(input: String): Int {
+        val games = input.split("\n")
+            .mapIndexed { i, l -> Game.fromString(i, l) }
+
+        return games.sumOf {
+            val maxByColour = it.getMaxRGB()
+            (maxByColour.first * maxByColour.second * maxByColour.third)
+        }
+    }
+
     private data class Game(val gameNum: Int = 0, val sets: List<GameSet> = emptyList()) {
         companion object {
             fun fromString(index: Int, str: String): Game {
@@ -60,63 +80,5 @@ class Day2 {
 
         }
     }
-
-
-
-
-    fun part1(input: String): Int {
-        // parse input
-        val games = input.split("\n")
-            .mapIndexed { i, l -> Game.fromString(i, l) }
-
-        // business logic
-        val maxCountsByColour = mapOf("red" to 12, "green" to 13, "blue" to 14)
-        val sum = games.filter { it.isPossible(maxCountsByColour) }
-            .sumOf { it.gameNum }
-
-
-        return sum
-    }
-
-    fun part2(input: String): Int {
-        // parse input
-        val games = input.split("\n")
-            .mapIndexed { i, l -> Game.fromString(i, l) }
-
-        // business logic
-        // find max of each colour in a game
-        val maxCubesPresentOfEachColour = mutableMapOf(
-            "red" to 0,
-            "green" to 0,
-            "blue" to 0
-        )
-        val sum = games.sumOf {
-            val maxByColour = it.getMaxRGB()
-
-
-            (maxByColour.first * maxByColour.second * maxByColour.third)
-        }
-
-
-        return sum
-    }
-
-
-//    private fun parseInputLine(index: Int, line: String): Game {
-//        val setInfo = line.split(": ")[1]
-//        val gameSets = setInfo.split("; ").map(::parseGameSetFromString)
-////        println("gameSets: $gameSets")
-//        return Game(index + 1, gameSets)
-//    }
-
-
-
-//    private fun parseLine(gameNum: Int, inputLine: String): List<Game> {
-//        val par = inputLine.split(": ")
-//        colonParts.println()
-//        // Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-//
-//        return
-//    }
 }
 
