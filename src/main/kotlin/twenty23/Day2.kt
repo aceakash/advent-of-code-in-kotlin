@@ -2,6 +2,17 @@ package twenty23
 
 class Day2 {
     private data class Game(val gameNum: Int = 0, val sets: List<GameSet> = emptyList()) {
+        companion object {
+            fun fromString(index: Int, str: String): Game {
+                val setInfo = str.split(": ")[1]
+                val gameSets = setInfo.split("; ").map {
+                    GameSet.fromString(it)
+                }
+                //        println("gameSets: $gameSets")
+                return Game(index + 1, gameSets)
+            }
+        }
+
         fun isPossible(maxCountsByColour: Map<String, Int>): Boolean {
             return this.sets.all { it.isPossible(maxCountsByColour) }
         }
@@ -13,25 +24,50 @@ class Day2 {
                 sets.maxBy { set -> set.blue }.blue
             )
         }
-    }
+        private data class GameSet(
+            val red: Int = 0,
+            val green: Int = 0,
+            val blue: Int = 0,
+        ) {
+            fun isPossible(maxCountsByColour: Map<String, Int>): Boolean {
+                return (this.red <= (maxCountsByColour["red"] ?: 0) // todo: use map with default
+                        && this.green <= (maxCountsByColour["green"] ?: 0)
+                        && this.blue <= (maxCountsByColour["blue"] ?: 0))
+            }
 
-    private data class GameSet(
-        val red: Int = 0,
-        val green: Int = 0,
-        val blue: Int = 0,
-    ) {
-        fun isPossible(maxCountsByColour: Map<String, Int>): Boolean {
-            return (this.red <= (maxCountsByColour["red"] ?: 0) // todo: use map with default
-                    && this.green <= (maxCountsByColour["green"] ?: 0)
-                    && this.blue <= (maxCountsByColour["blue"] ?: 0))
+//            private fun parseGameSetFromString(gameSetStr: String): GameSet {
+////        println("gameSetStr: $gameSetStr")
+//                val gameSetMap = mutableMapOf<String, Int>()
+//                gameSetStr.split(", ").forEach {
+//                    // x colour
+//                    val parts = it.split(" ")
+//                    gameSetMap[parts[1]] = parts[0].toInt()
+//                }
+//                return GameSet(gameSetMap["red"] ?: 0, gameSetMap["green"] ?: 0, gameSetMap["blue"] ?: 0)
+//            }
+
+            companion object {
+                fun fromString(gameSetStr: String): GameSet {
+                    val gameSetMap = mutableMapOf<String, Int>()
+                    gameSetStr.split(", ").forEach {
+                        // x colour
+                        val parts = it.split(" ")
+                        gameSetMap[parts[1]] = parts[0].toInt()
+                    }
+                    return GameSet(gameSetMap["red"] ?: 0, gameSetMap["green"] ?: 0, gameSetMap["blue"] ?: 0)
+                }
+            }
+
         }
     }
+
+
 
 
     fun part1(input: String): Int {
         // parse input
         val games = input.split("\n")
-            .mapIndexed { i, l -> parseInputLine(i, l) }
+            .mapIndexed { i, l -> Game.fromString(i, l) }
 
         // business logic
         val maxCountsByColour = mapOf("red" to 12, "green" to 13, "blue" to 14)
@@ -45,7 +81,7 @@ class Day2 {
     fun part2(input: String): Int {
         // parse input
         val games = input.split("\n")
-            .mapIndexed { i, l -> parseInputLine(i, l) }
+            .mapIndexed { i, l -> Game.fromString(i, l) }
 
         // business logic
         // find max of each colour in a game
@@ -66,23 +102,13 @@ class Day2 {
     }
 
 
-    private fun parseInputLine(index: Int, line: String): Game {
-        val setInfo = line.split(": ")[1]
-        val gameSets = setInfo.split("; ").map(::parseGameSetFromString)
-//        println("gameSets: $gameSets")
-        return Game(index + 1, gameSets)
-    }
+//    private fun parseInputLine(index: Int, line: String): Game {
+//        val setInfo = line.split(": ")[1]
+//        val gameSets = setInfo.split("; ").map(::parseGameSetFromString)
+////        println("gameSets: $gameSets")
+//        return Game(index + 1, gameSets)
+//    }
 
-    private fun parseGameSetFromString(gameSetStr: String): GameSet {
-//        println("gameSetStr: $gameSetStr")
-        val gameSetMap = mutableMapOf<String, Int>()
-        gameSetStr.split(", ").forEach {
-            // x colour
-            val parts = it.split(" ")
-            gameSetMap[parts[1]] = parts[0].toInt()
-        }
-        return GameSet(gameSetMap["red"] ?: 0, gameSetMap["green"] ?: 0, gameSetMap["blue"] ?: 0)
-    }
 
 
 //    private fun parseLine(gameNum: Int, inputLine: String): List<Game> {
