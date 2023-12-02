@@ -1,14 +1,17 @@
 package twenty23
 
 class Day2 {
-//    private data class Game(val gameNum: Int, val red: Int, val green: Int, val blue: Int)
-
-    private data class Game(
-        val gameNum: Int = 0,
-        val sets: List<GameSet> = emptyList()
-    ) {
+    private data class Game(val gameNum: Int = 0, val sets: List<GameSet> = emptyList()) {
         fun isPossible(maxCountsByColour: Map<String, Int>): Boolean {
             return this.sets.all { it.isPossible(maxCountsByColour) }
+        }
+
+        fun getMaxRGB(): Triple<Int, Int, Int> {
+            return Triple(
+                sets.maxBy { set -> set.red }.red,
+                sets.maxBy { set -> set.green }.green,
+                sets.maxBy { set -> set.blue }.blue
+            )
         }
     }
 
@@ -38,6 +41,30 @@ class Day2 {
 
         return sum
     }
+
+    fun part2(input: String): Int {
+        // parse input
+        val games = input.split("\n")
+            .mapIndexed { i, l -> parseInputLine(i, l) }
+
+        // business logic
+        // find max of each colour in a game
+        val maxCubesPresentOfEachColour = mutableMapOf(
+            "red" to 0,
+            "green" to 0,
+            "blue" to 0
+        )
+        val sum = games.sumOf {
+            val maxByColour = it.getMaxRGB()
+
+
+            (maxByColour.first * maxByColour.second * maxByColour.third)
+        }
+
+
+        return sum
+    }
+
 
     private fun parseInputLine(index: Int, line: String): Game {
         val setInfo = line.split(": ")[1]
