@@ -51,6 +51,29 @@ class Day3Test {
         assertEquals(537832, Day3().part1(realInput()))
     }
 
+    @Test
+    fun `part2 - sample input`() {
+        val input = """
+            467..114..
+            ...*......
+            ..35..633.
+            ......#...
+            617*......
+            .....+.58.
+            ..592.....
+            ......755.
+            ...+.*....
+            .664.598..
+        """.trimIndent()
+
+        assertEquals(467835, Day3().part2(input))
+    }
+
+    @Test
+    fun `part2 - real input`() {
+        assertEquals(81939900, Day3().part2(realInput()))
+    }
+
     private fun realInput(): String {
         return File("src/test/kotlin/twenty23/day3input.txt").readText().trim()
     }

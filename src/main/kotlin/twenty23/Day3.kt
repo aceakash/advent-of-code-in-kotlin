@@ -9,16 +9,41 @@ class Day3 {
     fun part1(input: String): Int {
         val grid: List<String> = input.split("\n")
 
+        val symbolCheck: (Char) -> Boolean = { c: Char -> !c.isDigit() && c!='.'}
+
         return getAllNumbers(grid)
-            .filter { isNextToSymbol(grid, it) }
+            .filter { isNextToSymbol(grid, it, symbolCheck) }
             .sumOf { it.first }
     }
 
-    private fun isNextToSymbol(grid: List<String>, gridNumber: GridNumber): Boolean {
+    fun part2(input: String): Int {
+        val grid: List<String> = input.split("\n")
+
+        val mapOfGearToSurroundingNumbers = mutableMapOf<Pos, MutableSet<GridNumber>>()
+
+        getAllNumbers(grid).forEach { number: GridNumber ->
+            getBorderPositionsForSeq(grid, number.second, number.third).forEach { borderPos ->
+                if (grid[borderPos.row][borderPos.col] == '*') {
+                    if (!mapOfGearToSurroundingNumbers.containsKey(borderPos)) {
+                        mapOfGearToSurroundingNumbers[borderPos] = mutableSetOf()
+                    }
+                    mapOfGearToSurroundingNumbers[borderPos]?.add(number)
+                }
+            }
+        }
+
+        return mapOfGearToSurroundingNumbers.entries
+            .filter { e -> e.value.size == 2 }
+            .map { it.value.fold(1) { acc, next -> acc * next.first } }
+            .sum()
+    }
+
+
+    private fun isNextToSymbol(grid: List<String>, gridNumber: GridNumber, symbolCheck: (Char) -> Boolean): Boolean {
         val borderPositions: List<Pos> = getBorderPositionsForSeq(grid, gridNumber.second, gridNumber.third)
         return borderPositions.any { pos ->
             val charAtPos = grid[pos.row][pos.col]
-            !charAtPos.isDigit() && charAtPos!='.'
+            symbolCheck(charAtPos)
         }
     }
 
@@ -78,4 +103,5 @@ class Day3 {
         val numbers: List<List<GridNumber>> = grid.mapIndexed { rowidx, row -> getNumbersFromRow(rowidx, row) }
         return numbers.flatten()
     }
+
 }
