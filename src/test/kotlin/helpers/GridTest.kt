@@ -13,5 +13,6 @@ class GridTest {
         """.trimIndent())
 
         assertEquals(3, grid.width)
+        assertEquals(3, grid.height)
     }
 }
