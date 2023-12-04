@@ -10,8 +10,10 @@ class Day4 {
         val parsed: List<Card> = parseInput(input)
 
         return parsed.sumOf { card ->
-            val matches = card.winningNums.toSet().intersect(card.nums.toSet())
-            if (matches.isEmpty()) 0 else (2.0).pow(matches.size - 1.0).toInt()
+            val matches = card.winningNums.toSet() intersect card.nums.toSet()
+
+            if (matches.isEmpty()) 0
+            else (2.0).pow(matches.size - 1.0).toInt()
         }
     }
 
@@ -29,7 +31,7 @@ class Day4 {
 
     private fun parseInput(input: String): List<Card> {
         return input.split("\n").map { line ->
-            val (winningNums, allNums) = line.substringAfter(":").split("|") //line.split(":")[1].split("|")
+            val (winningNums, allNums) = line.substringAfter(":").split("|")
             Card(parseIntList(winningNums), parseIntList(allNums))
         }
     }

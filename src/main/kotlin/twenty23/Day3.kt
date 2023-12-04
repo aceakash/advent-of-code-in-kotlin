@@ -1,9 +1,10 @@
 package twenty23
 
-data class Pos(val row: Int = 0, val col: Int = 0)
+import helpers.PosRC
+
 
 // the number, start pos and end pos in grid
-typealias GridNumber = Triple<Int, Pos, Pos>
+typealias GridNumber = Triple<Int, PosRC, PosRC>
 
 class Day3 {
     fun part1(input: String): Int {
@@ -19,10 +20,10 @@ class Day3 {
     fun part2(input: String): Int {
         val grid: List<String> = input.split("\n")
 
-        val mapOfGearToSurroundingNumbers = mutableMapOf<Pos, MutableSet<GridNumber>>()
+        val mapOfGearToSurroundingNumbers = mutableMapOf<PosRC, MutableSet<GridNumber>>()
 
         getAllNumbers(grid).forEach { number: GridNumber ->
-            getBorderPositionsForSeq(grid, number.second, number.third).forEach { borderPos ->
+            getBorderPositionsForSeq(grid, number.second, number.third).forEach { borderPos: PosRC ->
                 if (grid[borderPos.row][borderPos.col] == '*') {
                     if (!mapOfGearToSurroundingNumbers.containsKey(borderPos)) {
                         mapOfGearToSurroundingNumbers[borderPos] = mutableSetOf()
@@ -40,7 +41,7 @@ class Day3 {
 
 
     private fun isNextToSymbol(grid: List<String>, gridNumber: GridNumber, symbolCheck: (Char) -> Boolean): Boolean {
-        val borderPositions: List<Pos> = getBorderPositionsForSeq(grid, gridNumber.second, gridNumber.third)
+        val borderPositions: List<PosRC> = getBorderPositionsForSeq(grid, gridNumber.second, gridNumber.third)
         return borderPositions.any { pos ->
             val charAtPos = grid[pos.row][pos.col]
             symbolCheck(charAtPos)
@@ -48,18 +49,18 @@ class Day3 {
     }
 
     // todo this is reusable
-    private fun getBorderPositionsForSeq(grid: List<String>, start: Pos, end: Pos): List<Pos> {
+    private fun getBorderPositionsForSeq(grid: List<String>, start: PosRC, end: PosRC): List<PosRC> {
         assert(start.row == end.row)
-        val borderPositions = mutableListOf<Pos>()
+        val borderPositions = mutableListOf<PosRC>()
 
         //top and bottom row
         for (i in start.col-1..end.col+1) {
-            borderPositions.add(Pos(start.row-1, i))
-            borderPositions.add(Pos(start.row+1, i))
+            borderPositions.add(PosRC(start.row-1, i))
+            borderPositions.add(PosRC(start.row+1, i))
         }
         // sides
-        borderPositions.add(Pos(start.row, start.col-1))
-        borderPositions.add(Pos(start.row, end.col + 1))
+        borderPositions.add(PosRC(start.row, start.col-1))
+        borderPositions.add(PosRC(start.row, end.col + 1))
 
         return borderPositions
             .filterNot { pos -> pos.row < 0 || pos.row > grid.lastIndex }
@@ -87,13 +88,13 @@ class Day3 {
                 continue
             }
             // in-scan and not a digit
-            gridnums.add(GridNumber(row.substring(startPos!!, endPos!!+1).toInt(), Pos(rowidx, startPos), Pos(rowidx, endPos)))
+            gridnums.add(GridNumber(row.substring(startPos!!, endPos!!+1).toInt(), PosRC(rowidx, startPos), PosRC(rowidx, endPos)))
             inScan = false
             startPos = null
             endPos = null
         }
         if (inScan) {
-            gridnums.add(GridNumber(row.substring(startPos!!, endPos!!+1).toInt(), Pos(rowidx, startPos), Pos(rowidx, endPos)))
+            gridnums.add(GridNumber(row.substring(startPos!!, endPos!!+1).toInt(), PosRC(rowidx, startPos), PosRC(rowidx, endPos)))
         }
 
         return gridnums
