@@ -1,8 +1,10 @@
 package helpers
 
-
 class Grid<T> {
     private val rows: List<List<T>>
+
+    val width: Int
+    val height: Int
 
     constructor(rows: List<List<T>>) {
         assert(rows.isNotEmpty())
@@ -26,10 +28,24 @@ class Grid<T> {
         return rows[index].toList()
     }
 
-    val width: Int
+    fun getBorderPositionsForRowSection(start: PosRC, end: PosRC): Set<PosRC> {
+        assert(start.row == end.row)
+        val borderPositions = mutableSetOf<PosRC>()
 
-    val height: Int
+        //top and bottom row
+        for (i in start.col-1..end.col+1) {
+            borderPositions.add(PosRC(start.row-1, i))
+            borderPositions.add(PosRC(start.row+1, i))
+        }
+        // sides
+        borderPositions.add(PosRC(start.row, start.col-1))
+        borderPositions.add(PosRC(start.row, end.col + 1))
 
+        return borderPositions
+            .filterNot { pos -> pos.row < 0 || pos.row > rows.lastIndex }
+            .filterNot { pos -> pos.col < 0 || pos.col > rows[0].lastIndex }
+            .toSet()
+    }
 }
 
 fun <T> List<List<T>>.areAllSameSize(): Boolean {
