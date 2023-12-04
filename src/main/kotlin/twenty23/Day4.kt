@@ -1,5 +1,6 @@
 package twenty23
 
+import helpers.parseIntList
 import kotlin.math.pow
 
 data class Card(val winningNums: List<Int>, val nums: List<Int>, var count: Int = 1)
@@ -28,14 +29,8 @@ class Day4 {
 
     private fun parseInput(input: String): List<Card> {
         return input.split("\n").map { line ->
-            val parts = line.split(":")[1].split("|")
-            Card(parseNumList(parts[0]), parseNumList(parts[1]))
-        }
-    }
-
-    private fun parseNumList(str: String): List<Int> {
-        return str.trim().split("""\s+""".toRegex()).map {
-            it.trim().toInt()
+            val (winningNums, allNums) = line.substringAfter(":").split("|") //line.split(":")[1].split("|")
+            Card(parseIntList(winningNums), parseIntList(allNums))
         }
     }
 }
