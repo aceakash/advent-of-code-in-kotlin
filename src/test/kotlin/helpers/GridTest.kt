@@ -5,14 +5,13 @@ import kotlin.test.*
 class GridTest {
 
     @Test
-    fun `can parse a grid from a string`() {
-        val grid = Grid.fromString("""
-            .1.
-            2..
-            ..3
-        """.trimIndent())
+    fun `can get height and width of a grid`() {
+        val grid = Grid<Int>(listOf(
+            listOf(1, 2, 3),
+            listOf(4, 5, 6)
+        ))
 
         assertEquals(3, grid.width)
-        assertEquals(3, grid.height)
+        assertEquals(2, grid.height)
     }
 }

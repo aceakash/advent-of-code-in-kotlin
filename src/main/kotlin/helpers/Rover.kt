@@ -1,6 +1,6 @@
 package helpers
 
-data class Rover(var pos: Point2D = Point2D(), var heading: Dir = Dir.N) {
+data class Rover(var pos: PosXY = PosXY(), var heading: Dir = Dir.N) {
     fun turnRight() {
         heading = when(heading) {
             Dir.N -> Dir.E
