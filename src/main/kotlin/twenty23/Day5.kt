@@ -1,5 +1,7 @@
 package twenty23
 
+import java.time.LocalDateTime
+
 const val Seed = "seed"
 const val Soil = "soil"
 const val Fertiliser = "fertiliser"
@@ -19,27 +21,28 @@ class Day5 {
         val seeds = parseInitialSeeds(input)
         val stages = parseStages(input)
 
-        val sequencesForSeeds = seeds.map { seed ->
-            val seq = mutableMapOf(
-                Seed to -1L,
-                Soil to -1L,
-                Fertiliser to -1L,
-                Water to -1L,
-                Light to -1L,
-                Temp to -1L,
-                Humidity to -1L,
-                Location to -1L
-            )
-            seq[Seed] = seed
-            var currVal = seed
-            for (key in seq.keys.drop(1)) {
-                val nextVal = lookup(currVal, stages.find { it.destName == key }?.mapRanges)
-                seq[key] = nextVal
-                currVal = nextVal
-            }
-            seq
+        return seeds.map { findLocationForSeed(it, stages) }.min()
+    }
+
+    private fun findLocationForSeed(seed: Long, stages: List<Stage>): Long {
+        val seq = mutableMapOf(
+            Seed to -1L,
+            Soil to -1L,
+            Fertiliser to -1L,
+            Water to -1L,
+            Light to -1L,
+            Temp to -1L,
+            Humidity to -1L,
+            Location to -1L
+        )
+        seq[Seed] = seed
+        var currVal = seed
+        for (key in seq.keys.drop(1)) {
+            val nextVal = lookup(currVal, stages.find { it.destName == key }?.mapRanges)
+            seq[key] = nextVal
+            currVal = nextVal
         }
-        return sequencesForSeeds.minOfOrNull { it[Location]!!.toLong() } ?: -1
+        return seq[Location] ?: -1
     }
 
     private fun lookup(currVal: Long, mapRanges: Set<MapRange>?): Long {
@@ -79,8 +82,39 @@ class Day5 {
             .map { it.toLong() }
     }
 
+    private fun parseInitialSeedsAsRanges(input: String): List<LongRange> {
+        val nums = parseInitialSeeds(input)
 
-    fun part2(input: String): Int {
-        return 1
+        val seedRanges = mutableListOf<LongRange>()
+        var startOfRange = -1L
+        for (i in nums.indices) {
+            if (i % 2 == 1) {
+                seedRanges.add(LongRange(startOfRange, startOfRange + nums[i] - 1))
+                continue
+            }
+            startOfRange = nums[i]
+        }
+        return seedRanges
+    }
+
+
+    fun part2(input: String): Long {
+        val seedRanges = parseInitialSeedsAsRanges(input)
+        seedRanges.println()
+        val stages = parseStages(input)
+
+        var smallestLocation = Long.MAX_VALUE
+
+        for (seedRange in seedRanges) {
+            println("Starting seedRange: $seedRange at ${LocalDateTime.now()}")
+            for (seed in seedRange) {
+                val loc = findLocationForSeed(seed, stages)
+                if (loc < smallestLocation) {
+                    smallestLocation = loc
+                }
+            }
+            println("Finished seedRange: $seedRange. Smallest location so far: $smallestLocation")
+        }
+        return smallestLocation
     }
 }
