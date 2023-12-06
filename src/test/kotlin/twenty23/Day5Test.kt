@@ -94,7 +94,7 @@ class Day5Test {
     }
 
     @Test
-    fun `(SLOW ~25m) part 2 - real input`() {
+    fun `(SLOW ~6m multithreaded) part 2 - real input`() {
         assertEquals(72263011, Day5().part2(realInput()))
     }
 

@@ -1,6 +1,11 @@
 package twenty23
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
+import kotlin.system.measureTimeMillis
 
 const val Seed = "seed"
 const val Soil = "soil"
@@ -100,21 +105,34 @@ class Day5 {
 
     fun part2(input: String): Long {
         val seedRanges = parseInitialSeedsAsRanges(input)
-        seedRanges.println()
         val stages = parseStages(input)
 
         var smallestLocation = Long.MAX_VALUE
+        var ans = 0L
 
-        for (seedRange in seedRanges) {
-            println("Starting seedRange: $seedRange at ${LocalDateTime.now()}")
-            for (seed in seedRange) {
-                val loc = findLocationForSeed(seed, stages)
-                if (loc < smallestLocation) {
-                    smallestLocation = loc
-                }
+        val timeInMs = measureTimeMillis {
+            ans = runBlocking(Dispatchers.Default) {
+                val locations = seedRanges.map { seedRange ->
+
+                    async {
+                        println("SeedRange: $seedRange")
+                        for (seed in seedRange) {
+                            val loc = findLocationForSeed(seed, stages)
+                            if (loc < smallestLocation) {
+                                smallestLocation = loc
+                            }
+                        }
+                        smallestLocation
+                    }
+
+                }.awaitAll()
+                return@runBlocking locations.min()
             }
-            println("Finished seedRange: $seedRange. Smallest location so far: $smallestLocation")
         }
-        return smallestLocation
+
+        kotlin.io.println("Took ${timeInMs/1000/60} min")
+
+
+        return ans
     }
 }
